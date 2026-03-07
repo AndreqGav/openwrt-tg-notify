@@ -145,11 +145,6 @@ jobs:
         with:
           path: artifacts
 
-      - name: Checkout source
-        uses: actions/checkout@v4
-        with:
-          path: source
-          
       - name: Prepare packages for deploy
         run: |
           mkdir -p packages
@@ -158,13 +153,11 @@ jobs:
           find artifacts -mindepth 2 -maxdepth 2 -type d -exec cp -rf {} packages/ \;
 
       - name: Generate Index Files
-        run: |
-          # Copy source/index.html to all directories
-          find packages -type d -exec cp source/index.html {} \;
-          
-          echo "Final structure:"
-          find packages -maxdepth 4
-          
+        uses: gacts/directory-listing@v1
+        with:
+          target: packages
+          show-hidden: false
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
