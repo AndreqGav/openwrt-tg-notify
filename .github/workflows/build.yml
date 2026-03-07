@@ -145,22 +145,22 @@ jobs:
         with:
           path: artifacts
 
-      - name: Checkout source (for index.html)
+      - name: Checkout source
         uses: actions/checkout@v4
         with:
           path: source
-
+          
       - name: Prepare packages for deploy
         run: |
           mkdir -p packages
-          # Merge all artifacts into packages directory
-          # structure: artifacts/packages-version-arch/version/arch/file.ipk
-          # target: packages/version/arch/file.ipk
           
-          rsync -av artifacts/*/ packages/
+          # Flatten artifacts: move version folders from inside artifact folders to root packages/
+          find artifacts -mindepth 2 -maxdepth 2 -type d -exec cp -rf {} packages/ \;
 
-          # Copy index.html to the root of packages
-          cp source/index.html packages/index.html
+      - name: Generate Index Files
+        run: |
+          # Copy source/index.html to all directories
+          find packages -type d -exec cp source/index.html {} \;
           
           echo "Final structure:"
           find packages -maxdepth 4
