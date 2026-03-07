@@ -142,6 +142,11 @@ jobs:
         with:
           path: artifacts
 
+      - name: Checkout source (for index.html)
+        uses: actions/checkout@v4
+        with:
+          path: source
+
       - name: Prepare packages for deploy
         run: |
           mkdir -p packages
@@ -151,6 +156,9 @@ jobs:
           
           rsync -av artifacts/*/ packages/
 
+          # Copy index.html to the root of packages
+          cp source/index.html packages/index.html
+          
           echo "Final structure:"
           find packages -maxdepth 3
           
