@@ -11,7 +11,19 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "24.10.2 mediatek/filogic"
+            sdk_url: "https://downloads.openwrt.org/releases/24.10.2/targets/mediatek/filogic/openwrt-sdk-24.10.2-mediatek-filogic_gcc-13.3.0_musl.Linux-x86_64.tar.zst"
+            target_arch: "aarch64_cortex-a53"
+          - name: "21.02.7 ramips/mt7621"
+            sdk_url: "https://downloads.openwrt.org/releases/21.02.7/targets/ramips/mt7621/openwrt-sdk-21.02.7-ramips-mt7621_gcc-8.4.0_musl.Linux-x86_64.tar.xz"
+            target_arch: "mipsel_24kc"
+          - name: "21.02.7 mediatek/mt7622"
+            sdk_url: "https://downloads.openwrt.org/releases/21.02.7/targets/mediatek/mt7622/openwrt-sdk-21.02.7-mediatek-mt7622_gcc-8.4.0_musl.Linux-x86_64.tar.xz"
+            target_arch: "aarch64_cortex-a53"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,15 +37,22 @@ jobs:
             build-essential gawk gettext unzip file python3 rsync curl ca-certificates \
             zstd wget xz-utils
 
-      - name: Download SDK (24.10.2 mediatek/filogic)
+      - name: Download SDK
         run: |
           set -euxo pipefail
           echo "[sdk] mkdir /tmp/openwrt-sdk"
           mkdir -p /tmp/openwrt-sdk
           echo "[sdk] wget SDK"
-          wget https://downloads.openwrt.org/releases/24.10.2/targets/mediatek/filogic/openwrt-sdk-24.10.2-mediatek-filogic_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          wget -O sdk.tar.archive "${{ matrix.sdk_url }}"
+          
           echo "[sdk] extract SDK"
-          tar --use-compress-program=unzstd -xf openwrt-sdk-*.tar.zst --directory=/tmp/openwrt-sdk --strip-components=1
+          # Try tar with auto-detect first, if fails use explicit based on extension
+          if [[ "${{ matrix.sdk_url }}" == *".zst" ]]; then
+            tar --use-compress-program=unzstd -xf sdk.tar.archive --directory=/tmp/openwrt-sdk --strip-components=1
+          else
+            tar -xf sdk.tar.archive --directory=/tmp/openwrt-sdk --strip-components=1
+          fi
+          
           echo "[sdk] tree"
           ls -lah /tmp/openwrt-sdk
 
@@ -41,9 +60,11 @@ jobs:
         run: |
           set -euxo pipefail
           echo "[feeds] add local feed"
+          # Copy default feed config and append our local feed
           cp /tmp/openwrt-sdk/feeds.conf.default /tmp/openwrt-sdk/feeds.conf
           echo "" >> /tmp/openwrt-sdk/feeds.conf
           echo "src-link tg_notify ${GITHUB_WORKSPACE}/package" >> /tmp/openwrt-sdk/feeds.conf
+          
           echo "[feeds] update -a"
           cd /tmp/openwrt-sdk
           ./scripts/feeds update -a
@@ -71,14 +92,13 @@ jobs:
           echo "[build] luci-app-tg-notify"
           make package/luci-app-tg-notify/compile -j"$(nproc)" V=s
 
-      # ВАЖНО: индекс создаём штатно через "make package/index"
       - name: Index repository (make package/index)
         run: |
           set -euxo pipefail
           cd /tmp/openwrt-sdk
-          ARCH="aarch64_cortex-a53"
+          ARCH="${{ matrix.target_arch }}"
 
-          # если задан ключ — кладём его в корень SDK как "key-build"
+          # Если задан ключ — кладём его в корень SDK как "key-build"
           if [ -n "${{ secrets.USIGN_KEY }}" ]; then
             echo "[index] write key-build"
             printf "%s" "${{ secrets.USIGN_KEY }}" > key-build
@@ -93,13 +113,47 @@ jobs:
           mkdir -p ${GITHUB_WORKSPACE}/packages/${ARCH}
           mkdir -p ${GITHUB_WORKSPACE}/packages/all
 
-          # из bin/packages/<arch>/<feed>/ и bin/packages/all/<feed>/ забираем всё
+          # Извлекаем собранные пакеты из SDK
+          # Путь может варьироваться, ищем в bin/packages/
+          # Обычно это bin/packages/<arch>/tg_notify/
+          
+          # На всякий случай выведем структуру bin/packages
+          find bin/packages -maxdepth 3 -type d || true
+
           rsync -a bin/packages/${ARCH}/tg_notify/ ${GITHUB_WORKSPACE}/packages/${ARCH}/ || true
           rsync -a bin/packages/all/tg_notify/ ${GITHUB_WORKSPACE}/packages/all/ || true
 
           echo "[index] result:"
           find ${GITHUB_WORKSPACE}/packages -maxdepth 2 -type f -printf "%P\n" | sort || true
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.target_arch }}-${{ strategy.job-index }}
+          path: packages/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare packages for deploy
+        run: |
+          mkdir -p packages
+          # Merge all artifacts into packages directory
+          # structure: artifacts/packages-arch-index/arch/file.ipk
+          # target: packages/arch/file.ipk
+          
+          rsync -av artifacts/*/ packages/
+
+          echo "Final structure:"
+          find packages -maxdepth 3
+          
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
