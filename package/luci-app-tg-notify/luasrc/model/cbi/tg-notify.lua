@@ -1,4 +1,6 @@
 local uci = require "luci.model.uci".cursor()
+local sys = require "luci.sys"
+local util = require "luci.util"
 local db_path = uci:get("tg-notify", "main", "db_path") or ""
 
 m = Map("tg-notify", translate("New Device Notify"),
@@ -54,6 +56,24 @@ function template.write(self, section, value)
         value = value:gsub("\n", "\\n")
     end
     self.map.uci:set("tg-notify", section, "template", value)
+end
+
+
+-- Test Notification
+test_msg = s:option(Value, "_test_msg", translate("Test Message"))
+test_msg.rmempty = false
+test_msg.default = "Test message"
+function test_msg.write(self, section, value)
+    return -- do not save to UCI
+end
+
+btn_test = s:option(Button, "_test_send", translate("Send Test Message"))
+btn_test.inputstyle = "apply"
+function btn_test.write(self, section)
+    local msg = self.map:formvalue("cbid.tg-notify.main._test_msg")
+    if msg and #msg > 0 then
+        sys.call(string.format("/usr/bin/tg-notify_send.sh %s >/dev/null 2>&1", util.shellquote(msg)))
+    end
 end
 
 btn = s:option(Button, "_reset", translate("Forget all devices"))
