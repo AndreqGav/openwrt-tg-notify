@@ -7,8 +7,8 @@ URL: https://github.com/openwrt/luci
 Architecture: all
 Installed-Size: 20480
 Filename: luci-app-tg-notify_1.0.5-r1_all.ipk
-Size: 2932
-SHA256sum: 3ba2e69f4f1621d17914a00b015e48a894edd3b8a70e5590bbf4a51d3adf5375
+Size: 2935
+SHA256sum: d6ecc2ca17186230a60b71e34e08f7a897a79248fa38bf9b89699224228c9c63
 Description:  LuCI Support for Telegram Notify
 
 Package: tg-notify
@@ -20,6 +20,6 @@ Architecture: aarch64_cortex-a53
 Installed-Size: 20480
 Filename: tg-notify_1.0.5-r1_aarch64_cortex-a53.ipk
 Size: 3170
-SHA256sum: a4acbd4a02f554ad5c088a1286c9967960a4b0fceb43f56c9684375d2de3f31a
+SHA256sum: 9f5179687e5e7765af91facb70cf5e22b424df26662ac1b02d922f4a24c1771c
 Description:  Sends Telegram message when a new DHCP client appears; deduplicates by MAC and NETWORK NAME.
 
