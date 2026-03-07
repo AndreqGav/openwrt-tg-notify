@@ -1,0 +1,6 @@
+<%+cbi/valueheader%>
+	<div style="display: flex; align-items: center; gap: 10px;">
+		<input type="text" class="cbi-input-text" style="flex: 1; min-width: 200px;" onchange="cbi_d_update(this.id)" name="<%=self.cbid and self:cbid(section) or ''%>" id="<%=self.cbid and self:cbid(section) or ''%>" value="<%=pcdata(self:cfgvalue(section) or self.default or "")%>" />
+		<input type="submit" class="cbi-button cbi-button-apply" name="cbid.tg-notify.main._test_send" value="<%:Send%>" />
+	</div>
+<%+cbi/valuefooter%>

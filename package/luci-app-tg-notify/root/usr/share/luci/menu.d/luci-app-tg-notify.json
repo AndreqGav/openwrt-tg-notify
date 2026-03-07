@@ -1,6 +1,6 @@
 {
 	"admin/services/tg-notify": {
-		"title": "New Device Notify",
+		"title": "Telegram Notify",
 		"order": 90,
 		"action": {
 			"type": "view",

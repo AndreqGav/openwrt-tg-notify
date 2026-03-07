@@ -3,7 +3,7 @@ local sys = require "luci.sys"
 local util = require "luci.util"
 local db_path = uci:get("tg-notify", "main", "db_path") or ""
 
-m = Map("tg-notify", translate("New Device Notify"),
+m = Map("tg-notify", translate("Telegram Notify"),
     translate("Send Telegram alerts when a new device connects to the network."))
 
 s = m:section(NamedSection, "main", "bot", translate("Bot Settings"))
@@ -63,12 +63,14 @@ end
 test_msg = s:option(Value, "_test_msg", translate("Test Message"))
 test_msg.rmempty = false
 test_msg.default = "Test message"
+test_msg.template = "tg-notify/test_send"
 function test_msg.write(self, section, value)
     return -- do not save to UCI
 end
 
-btn_test = s:option(Button, "_test_send", translate("Send Test Message"))
-btn_test.inputstyle = "apply"
+-- Hidden button to handle the submit action from the template
+btn_test = s:option(Button, "_test_send", "")
+btn_test.render = function() return "" end
 function btn_test.write(self, section)
     local msg = self.map:formvalue("cbid.tg-notify.main._test_msg")
     if msg and #msg > 0 then

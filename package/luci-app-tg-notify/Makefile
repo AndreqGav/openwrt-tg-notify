@@ -1,11 +1,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-tg-notify
-PKG_VERSION:=1.0.4
+PKG_VERSION:=1.0.5
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 
-LUCI_TITLE:=LuCI Support for New Device Notify
+LUCI_TITLE:=LuCI Support for Telegram Notify
 LUCI_DEPENDS:=+tg-notify
 LUCI_PKGARCH:=all
 
