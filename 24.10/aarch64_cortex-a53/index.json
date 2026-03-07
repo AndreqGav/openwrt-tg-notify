@@ -2,7 +2,7 @@
   "version": 2,
   "architecture": "aarch64_cortex-a53",
   "packages": {
-    "luci-app-tg-notify": "1.0.6-r1",
-    "tg-notify": "1.0.6-r1"
+    "luci-app-tg-notify": "1.0.5-r1",
+    "tg-notify": "1.0.5-r1"
   }
 }

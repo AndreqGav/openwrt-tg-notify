@@ -1,31 +1,31 @@
 Package: luci-app-tg-notify
-Version: 1.0.6
-Depends: libc, tg-notify, luci-compat
+Version: 1.0.5
+Depends: libc, tg-notify
 Source: /home/runner/work/openwrt-tg-notify/openwrt-tg-notify/package/luci-app-tg-notify
 SourceName: luci-app-tg-notify
 License: MIT
 Section: luci
-SourceDateEpoch: 1772905597
+SourceDateEpoch: 1772906583
 Maintainer: OpenWrt LuCI community
 Architecture: all
-Installed-Size: 1916
-Filename: luci-app-tg-notify_1.0.6_all.ipk
-Size: 2756
-SHA256sum: e50b91e042392a25c6910980553dc5df250d655a19f4c429f6dcf9fa62caa1ef
+Installed-Size: 2056
+Filename: luci-app-tg-notify_1.0.5_all.ipk
+Size: 2901
+SHA256sum: 6bb0da71714f494e5a9841d724fa2e31db3215b286c6f05f39c2a15c24e4c594
 Description:  LuCI Support for Telegram Notify
 
 Package: tg-notify
-Version: 1.0.6-r1
-Depends: libc, curl, libuci20130104, libubox20210516
+Version: 1.0.5-r1
+Depends: libc, curl, libuci20130104, libubox20210516, flock
 Source: /home/runner/work/openwrt-tg-notify/openwrt-tg-notify/package/tg-notify
 SourceName: tg-notify
 License: MIT
 Section: utils
-SourceDateEpoch: 1772905597
-Architecture: all
-Installed-Size: 2364
-Filename: tg-notify_1.0.6-r1_all.ipk
-Size: 3175
-SHA256sum: fd9fab95db557c7764c8c1e0465dd7db7c20001a1a8d61cc68aebf674e27164a
+SourceDateEpoch: 1772906583
+Architecture: mipsel_24kc
+Installed-Size: 2346
+Filename: tg-notify_1.0.5-r1_mipsel_24kc.ipk
+Size: 3178
+SHA256sum: 544bdfd6a1ce3f9bd37eeae6267dc2ff0fcc6d59b5f26d0da54519a622e21b16
 Description:  Sends Telegram message when a new DHCP client appears; deduplicates by MAC and NETWORK NAME.
 
