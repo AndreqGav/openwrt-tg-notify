@@ -6,7 +6,7 @@ PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 
 LUCI_TITLE:=LuCI Support for Telegram Notify
-LUCI_DEPENDS:=+tg-notify
+LUCI_DEPENDS:=+tg-notify +luci-compat
 LUCI_PKGARCH:=all
 
 include $(TOPDIR)/feeds/luci/luci.mk
