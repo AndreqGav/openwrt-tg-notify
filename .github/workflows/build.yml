@@ -41,7 +41,9 @@ jobs:
         run: |
           set -euxo pipefail
           echo "[feeds] add local feed"
-          echo "src-link newdevnotify ${GITHUB_WORKSPACE}/package" >> /tmp/openwrt-sdk/feeds.conf.default
+          cp /tmp/openwrt-sdk/feeds.conf.default /tmp/openwrt-sdk/feeds.conf
+          echo "" >> /tmp/openwrt-sdk/feeds.conf
+          echo "src-link tg_notify ${GITHUB_WORKSPACE}/package" >> /tmp/openwrt-sdk/feeds.conf
           echo "[feeds] update -a"
           cd /tmp/openwrt-sdk
           ./scripts/feeds update -a
@@ -64,10 +66,10 @@ jobs:
         run: |
           set -euxo pipefail
           cd /tmp/openwrt-sdk
-          echo "[build] newdevnotify"
-          make package/newdevnotify/compile -j"$(nproc)" V=s
-          echo "[build] luci-app-newdevnotify"
-          make package/luci-app-newdevnotify/compile -j"$(nproc)" V=s
+          echo "[build] tg-notify"
+          make package/tg-notify/compile -j"$(nproc)" V=s
+          echo "[build] luci-app-tg-notify"
+          make package/luci-app-tg-notify/compile -j"$(nproc)" V=s
 
       # ВАЖНО: индекс создаём штатно через "make package/index"
       - name: Index repository (make package/index)
@@ -92,8 +94,8 @@ jobs:
           mkdir -p ${GITHUB_WORKSPACE}/packages/all
 
           # из bin/packages/<arch>/<feed>/ и bin/packages/all/<feed>/ забираем всё
-          rsync -a bin/packages/${ARCH}/newdevnotify/ ${GITHUB_WORKSPACE}/packages/${ARCH}/ || true
-          rsync -a bin/packages/all/newdevnotify/ ${GITHUB_WORKSPACE}/packages/all/ || true
+          rsync -a bin/packages/${ARCH}/tg_notify/ ${GITHUB_WORKSPACE}/packages/${ARCH}/ || true
+          rsync -a bin/packages/all/tg_notify/ ${GITHUB_WORKSPACE}/packages/all/ || true
 
           echo "[index] result:"
           find ${GITHUB_WORKSPACE}/packages -maxdepth 2 -type f -printf "%P\n" | sort || true

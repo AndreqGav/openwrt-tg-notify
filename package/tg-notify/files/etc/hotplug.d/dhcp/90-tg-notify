@@ -2,7 +2,7 @@
 [ "$ACTION" = "del" ] && exit 0
 
 . /lib/functions.sh
-config_load newdevnotify
+config_load tg-notify
 config_get start_timeout_sec main start_timeout_sec '30'
 config_get enabled     main enabled 1
 config_get db_path     main db_path ''
@@ -41,7 +41,7 @@ fi
 
 [ -f "$db_path" ] || touch "$db_path"
 
-logger -t newdevnotify-trace "$ACTION DHCP: $NETNAME MAC=$MAC HOST=$HOST IP=$IP"
+logger -t tg-notify-trace "$ACTION DHCP: $NETNAME MAC=$MAC HOST=$HOST IP=$IP"
 
 REPEAT_AFTER_SEC="$main_repeat_after_sec"
 [ "$NETNAME" = "$guest_label" ] && REPEAT_AFTER_SEC="$guest_repeat_after_sec"
@@ -96,14 +96,14 @@ DEDUPE_KEY="$NETNAME|MAC:$MAC"
 
     MSG=$(echo -e "$MSG")
 
-    logger -t newdevnotify "NEW: $NETNAME MAC=$MAC HOST=$HOST IP=$IP"
-    /usr/bin/newdevnotify_send.sh "$MSG"
+    logger -t tg-notify "NEW: $NETNAME MAC=$MAC HOST=$HOST IP=$IP"
+    /usr/bin/tg-notify_send.sh "$MSG"
 
     # Удаляем все строки с этим ключом
     sed -i "\#$DEDUPE_KEY#d" "$db_path"
 
     echo "$DEDUPE_KEY|TIMESTAMP:$ts|$HOST" >> "$db_path"
   else
-    logger -t newdevnotify "KNOWN: $NETNAME MAC=$MAC HOST=$HOST IP=$IP"
+    logger -t tg-notify "KNOWN: $NETNAME MAC=$MAC HOST=$HOST IP=$IP"
   fi
-) 200>/var/lock/newdevnotify.lock
+) 200>/var/lock/tg-notify.lock

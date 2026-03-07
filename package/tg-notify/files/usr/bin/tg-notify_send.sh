@@ -1,6 +1,6 @@
 #!/bin/sh
 . /lib/functions.sh
-config_load newdevnotify
+config_load tg-notify
 config_get enabled main enabled 1
 [ "$enabled" = "1" ] || exit 0
 config_get token   main token

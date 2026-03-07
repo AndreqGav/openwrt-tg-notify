@@ -1,7 +1,7 @@
 local uci = require "luci.model.uci".cursor()
-local db_path = uci:get("newdevnotify", "main", "db_path") or ""
+local db_path = uci:get("tg-notify", "main", "db_path") or ""
 
-m = Map("newdevnotify", translate("New Device Notify"),
+m = Map("tg-notify", translate("New Device Notify"),
     translate("Send Telegram alerts when a new device connects to the network."))
 
 s = m:section(NamedSection, "main", "bot", translate("Bot Settings"))
@@ -41,7 +41,7 @@ template.rmempty = true
 template.description = translate("Use variables: $NETNAME, $DATE, $HOST, $MAC, $IP.")
 
 function template.cfgvalue(self, section)
-    local val = self.map.uci:get("newdevnotify", section, "template")
+    local val = self.map.uci:get("tg-notify", section, "template")
     if val then
         val = val:gsub("\\n", "\n")
     end
@@ -53,7 +53,7 @@ function template.write(self, section, value)
         value = value:gsub("\r\n?", "\n")
         value = value:gsub("\n", "\\n")
     end
-    self.map.uci:set("newdevnotify", section, "template", value)
+    self.map.uci:set("tg-notify", section, "template", value)
 end
 
 btn = s:option(Button, "_reset", translate("Forget all devices"))

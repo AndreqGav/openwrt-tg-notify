@@ -1,4 +1,4 @@
-# openwrt-newdevnotify
+# openwrt-tg-notify
 Sends Telegram message when a new DHCP client appears; deduplicates by MAC and NETWORK NAME.
 
 Для настройки необходимо создать своего бота в телеграмм и указать его токен и идентификатор чат с вами в конфигурации:
@@ -11,4 +11,4 @@ Sends Telegram message when a new DHCP client appears; deduplicates by MAC and N
 
 	Можно узанть отправив запрос GET https://api.telegram.org/bot{{notify_bot_token}}/getUpdates и в нем будет chat.id с вами
 
-4. Установить параметры token, chat_id в /etc/config/newdevnotify или используйте плагин luci-app-newdevnotify и через LuCI сделайте это (Services->New Device Notify)
+4. Установить параметры token, chat_id в /etc/config/tg-notify или используйте плагин luci-app-tg-notify и через LuCI сделайте это (Services->New Device Notify)
