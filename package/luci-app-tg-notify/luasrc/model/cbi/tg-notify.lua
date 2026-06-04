@@ -17,6 +17,15 @@ token.datatype = "string"
 chat_id = s:option(Value, "chat_id", translate("Chat ID"))
 chat_id.datatype = "string"
 
+iface = s:option(ListValue, "interface", translate("Send via interface"),
+    translate("Network interface for outgoing requests. Use to force traffic through VPN."))
+iface:value("", translate("Default (system routing)"))
+for _, dev in ipairs(sys.net.devices()) do
+    iface:value(dev, dev)
+end
+iface.default = ""
+iface.rmempty = true
+
 start_timeout = s:option(Value, "start_timeout_sec", translate("Startup delay (seconds)"))
 start_timeout.datatype = "uinteger"
 start_timeout.default = 30
