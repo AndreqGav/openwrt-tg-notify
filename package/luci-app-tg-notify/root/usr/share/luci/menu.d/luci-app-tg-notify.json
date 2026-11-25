@@ -1,10 +1,10 @@
 {
-	"admin/services/tg-notify": {
-		"title": "Telegram Notify",
-		"order": 90,
-		"action": {
-			"type": "view",
-			"path": "tg-notify"
-		}
-	}
+    "admin/services/tg-notify": {
+        "title": "Telegram Notify",
+        "order": 90,
+        "action": {
+            "type": "cbi",
+            "path": "tg-notify"
+        }
+    }
 }
