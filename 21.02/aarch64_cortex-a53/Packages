@@ -4,10 +4,10 @@ Depends: libc, tg-notify, luci-compat
 License: MIT
 Section: luci
 Architecture: all
-Installed-Size: 2191
+Installed-Size: 2187
 Filename: luci-app-tg-notify_1.0.6_all.ipk
-Size: 3047
-SHA256sum: df5e76252fd0dd466c74aab4ea0e030d2614db948948846936220f8beb6be4fb
+Size: 3040
+SHA256sum: a9c92cef5de277109194a57d944bb8615999588858d0f45b91c13cacd8b2921c
 Description:  LuCI Support for Telegram Notify
 
 Package: tg-notify
@@ -16,9 +16,9 @@ Depends: libc, curl, libuci20130104, libubox20210516, flock
 License: MIT
 Section: utils
 Architecture: aarch64_cortex-a53
-Installed-Size: 2387
+Installed-Size: 2385
 Filename: tg-notify_1.0.6-r1_aarch64_cortex-a53.ipk
 Size: 3220
-SHA256sum: 8dbe89687ea1f76480cc22aad627e556b422176af741f417de7599eabe43d027
+SHA256sum: 7636904ff8c04dddd86c1310021c304e71d0b78aa20d518c4ca49f928306f888
 Description:  Sends Telegram message when a new DHCP client appears; deduplicates by MAC and NETWORK NAME.
 
