@@ -174,6 +174,10 @@ jobs:
           # Flatten artifacts: move version folders from inside artifact folders to root packages/
           find artifacts -mindepth 2 -maxdepth 2 -type d -exec cp -rf {} packages/ \;
 
+      - name: Publish public signing key
+        run: |
+          cp key-build.pub packages/key-build.pub
+        
       - name: Generate Index Files
         uses: gacts/directory-listing@v1
         with:
