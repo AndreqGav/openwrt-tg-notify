@@ -6,6 +6,18 @@ Sends Telegram message when a new DHCP client appears; deduplicates by MAC and N
 
 Поддерживаются версии 21.02 и 24.10
 
+Установить публичный ключ пакета, чтобы доверять источнику плагинов
+
+```
+wget -O /tmp/key-build.pub \
+  https://andreqgav.github.io/openwrt-tg-notify/key-build.pub
+
+KEY_ID=$(usign -F -p /tmp/key-build.pub)
+
+mkdir -p /etc/opkg/keys
+cp /tmp/key-build.pub "/etc/opkg/keys/$KEY_ID"
+```
+
 Установить плагины tg-notify и luci-app-tg-notify
 
 Для настройки необходимо создать своего бота в телеграмм и указать его токен и идентификатор чат с вами в конфигурации:
