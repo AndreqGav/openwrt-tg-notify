@@ -87,6 +87,19 @@ function btn_test.write(self, section)
     end
 end
 
+local import = s:option(Button, "_import", translate("Import current DHCP clients"),
+    translate("Process active DHCPv4 leases from /tmp/dhcp.leases using the current notification settings."))
+import.inputtitle = translate("Import clients")
+import.inputstyle = "apply"
+function import.write(self)
+    if nixio.fs.access("/usr/bin/tg-notify_import.sh", "x") then
+        sys.call("/usr/bin/tg-notify_import.sh </dev/null >/dev/null 2>&1 &")
+        self.map.message = translate("Client import started. Refresh this page to see the updated database.")
+    else
+        self.map.message = translate("Client import requires an updated tg-notify package.")
+    end
+end
+
 btn = s:option(Button, "_reset", translate("Forget all devices"))
 btn.inputstyle = "reset"
 function btn.write()

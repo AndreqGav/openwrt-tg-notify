@@ -31,3 +31,5 @@ cp /tmp/key-build.pub "/etc/opkg/keys/$KEY_ID"
 	Можно узанть отправив запрос GET https://api.telegram.org/bot{{notify_bot_token}}/getUpdates и в нем будет chat.id с вами
 
 4. Установить параметры token, chat_id в /etc/config/tg-notify или используйте плагин luci-app-tg-notify и через LuCI сделайте это (Services->Telegram Notify)
+
+После установки или переустановки сохраните настройки бота и нажмите **Import clients** в **Services → Telegram Notify**. Плагин обработает действующие аренды DHCPv4 из `/tmp/dhcp.leases` и отправит уведомления по обычным правилам. Импорт выполняется в фоне. Обновите страницу, чтобы увидеть записи в базе.

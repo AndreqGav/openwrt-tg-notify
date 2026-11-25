@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tg-notify
-PKG_VERSION:=1.0.6
+PKG_VERSION:=1.0.7
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 
@@ -30,6 +30,7 @@ define Package/tg-notify/install
 	$(INSTALL_BIN) ./files/etc/hotplug.d/dhcp/90-tg-notify $(1)/etc/hotplug.d/dhcp/90-tg-notify
 
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/usr/bin/tg-notify_import.sh $(1)/usr/bin/tg-notify_import.sh
 	$(INSTALL_BIN) ./files/usr/bin/tg-notify_send.sh $(1)/usr/bin/tg-notify_send.sh
 
 	$(INSTALL_DIR) $(1)/etc/tg-notify
