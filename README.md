@@ -1,7 +1,8 @@
 # openwrt-tg-notify
 Sends Telegram message when a new DHCP client appears; deduplicates by MAC and NETWORK NAME.
 
-Указать источник для плагина: https://andreqgav.github.io/openwrt-tg-notify/
+Указать источник для плагина: https://andreqgav.github.io/openwrt-tg-notify/{версия}/{архитектура}
+пример: https://andreqgav.github.io/openwrt-tg-notify/21.02/aarch64_cortex-a53
 
 Поддерживаются версии 21.02 и 24.10
 
