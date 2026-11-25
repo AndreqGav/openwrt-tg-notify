@@ -34,11 +34,33 @@ jobs:
       - name: Install deps
         run: |
           set -euxo pipefail
-          echo "[deps] install..."
+      
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            build-essential gawk gettext unzip file python3 rsync curl ca-certificates \
-            zstd wget xz-utils
+            build-essential \
+            coreutils \
+            gawk \
+            gettext \
+            unzip \
+            file \
+            python3 \
+            rsync \
+            curl \
+            ca-certificates \
+            zstd \
+            wget \
+            xz-utils \
+            git \
+            patch \
+            diffutils \
+            findutils \
+            perl \
+            libncurses-dev \
+            zlib1g-dev
+
+          echo "[check] GNU install"
+          command -v install
+          install --version
 
       - name: Download SDK
         run: |
